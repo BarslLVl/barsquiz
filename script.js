@@ -571,8 +571,6 @@ function startTimer(duration, display) {
     const feedbackForm = document.getElementById('feedbackForm');
     const feedbackText = feedbackForm.elements.feedback.value;
   
-    // Here you can add logic to send feedback, for example, to the server
-  
     const quizContainer = document.getElementById('quiz');
     quizContainer.innerHTML = '';
   
