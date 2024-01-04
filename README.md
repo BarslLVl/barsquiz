@@ -65,7 +65,7 @@ No unfixed bugs.
     - From the source section drop-down menu, select the Master Branch
     - Once the master branch has been selected, the page provided the link to the completed website.
 
-The live link can be found here - [BarsQuiz](barsllvl.github.io/barsquiz/).
+The live link can be found here - [BarsQuiz](https://barsllvl.github.io/barsquiz/).
 ## Credits
 ### Content
 - Code for fixing footer, setting timer, adding function taken from [w3schools](https://www.w3schools.com) and [freeCodeCamp](https://www.freecodecamp.org).
