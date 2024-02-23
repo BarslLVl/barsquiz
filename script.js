@@ -305,42 +305,48 @@ function loadQuestions(topic) {
 
 // Check the answer to the question and switch to the next question
 function loadNextQuestion() {
-    currentQuestionIndex++;
-    loadQuestions(currentTopic);
+  currentQuestionIndex++;
+  if (currentQuestionIndex >= questions[currentTopic].length) {
+      // If it's the last question, go to the scoreboard
+      displayScoreBoard();
+  } else {
+      loadQuestions(currentTopic);
+  }
 }
 
 // Start the timer for each question
 function startTimer(duration, display) {
   let timer = duration;
   interval = setInterval(function () {
-    const minutes = parseInt(timer / 60, 10);
-    const seconds = parseInt(timer % 60, 10);
-    const minutesStr = minutes < 10 ? `0${minutes}` : `${minutes}`;
-    const secondsStr = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      const minutes = parseInt(timer / 60, 10);
+      const seconds = parseInt(timer % 60, 10);
+      const minutesStr = minutes < 10 ? `0${minutes}` : `${minutes}`;
+      const secondsStr = seconds < 10 ? `0${seconds}` : `${seconds}`;
 
-    display.textContent = `${minutesStr}:${secondsStr}`;
+      display.textContent = `${minutesStr}:${secondsStr}`;
 
-    if (--timer < 0) {
-      clearInterval(interval);
-      display.textContent = '00:00'; // Display 00:00 after the end of time
+      if (--timer < 0) {
+          clearInterval(interval);
+          display.textContent = '00:00'; // Display 00:00 after the end of time
 
-      const radios = document.querySelectorAll('input[type="radio"]');
-      radios.forEach(radio => {
-        radio.disabled = true; // Disable radio buttons after time expires
-      });
+          const radios = document.querySelectorAll('input[type="radio"]');
+          radios.forEach(radio => {
+              radio.disabled = true; // Disable radio buttons after time expires
+          });
 
-      const timerDisplay = document.getElementById(`timer${currentQuestionIndex}`);
-      const timeUpMessage = document.createElement('p');
-      timeUpMessage.textContent = 'Time is up! The answer is automatically counted as incorrect. You will be automatically switched to the next question within 5 seconds!';
-      timeUpMessage.style.color = 'red';
-      timeUpMessage.className = 'wrong-answer';
-      timerDisplay.parentNode.appendChild(timeUpMessage);
+          const timerDisplay = document.getElementById(`timer${currentQuestionIndex}`);
+          const timeUpMessage = document.createElement('p');
+          timeUpMessage.textContent = 'Time is up! The answer is automatically counted as incorrect. You will be automatically switched to the next page within 5 seconds!';
+          timeUpMessage.style.color = 'red';
+          timeUpMessage.className = 'wrong-answer';
+          timerDisplay.parentNode.appendChild(timeUpMessage);
 
-      // Display next question automatically after time has expired
-      setTimeout(loadNextQuestion, 5000); // Is the delay time before the next question is automatically loaded (in milliseconds)
-    }
+          // Display next question automatically after time has expired
+          setTimeout(loadNextQuestion, 5000); // Is the delay time before the next question is automatically loaded (in milliseconds)
+      }
   }, 1000);
 }
+
   
   
   

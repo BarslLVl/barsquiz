@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quiz</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <div class="background">
     <a href="index.html">
@@ -15,8 +17,9 @@
       <div class="quiz-container">
         <h1 id="welcome-text">Welcome to</h1>
         <h1 id="quiz-title">
-          <img src="Gallery/Logo-Files/For-Web/svg/ColorLogo-nobackground.svg" alt="QuizName" class="QuizName" style="width: 500px; height: auto; object-fit: cover;">
-        </h1>    
+          <img src="Gallery/Logo-Files/For-Web/svg/ColorLogo-nobackground.svg" alt="QuizName" class="QuizName"
+            style="width: 500px; height: auto; object-fit: cover;">
+        </h1>
         <div class="nickname">
           <label for="nickname"></label>
           <input type="text" id="nickname" placeholder="Enter your nickname">
@@ -36,14 +39,13 @@
   </div>
   <script src="script.js"></script>
   <script>
- // Code that hides "Welcome to" after entering a nickname
-  document.getElementById('submitNickname').addEventListener('click', function() {
-  const welcomeText = document.getElementById('welcome-text');
-  const quizContainer = document.getElementById('quiz');
+    // Code that hides "Welcome to" after entering a nickname
+    document.getElementById('submitNickname').addEventListener('click', function () {
+      const welcomeText = document.getElementById('welcome-text');
 
-  welcomeText.style.display = 'none'; // Hide "Welcome to"
-   quizContainer.style.display = 'block'; // Showing the quiz container
-  });
+      welcomeText.style.display = 'none'; // Hide "Welcome to"
+    });
   </script>
 </body>
+
 </html>

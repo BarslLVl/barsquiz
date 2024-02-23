@@ -1,79 +1,90 @@
 /* All main styles */
-body {
-    font-family : Arial, sans-serif;
-    margin : 0;
-    padding : 0;
-    }
-    .background {
-    background-color : #5f16e6;
-    height : 100vh;
-    display : flex;
-    justify-content : center;
-    align-items : center;
-    }
-    .center {
-    width : auto;
-    height : auto;
-    padding : 20px;
-    border-radius : 10px;
-    text-align : center;
-    background-color : white;
-    position : relative;
-    }
-    .center::before {
-    content : "";
-    position : absolute;
-    top : -20px;
-    left : -20px;
-    width : calc(100% + 40px);
-    height : calc(100% + 40px);
-    background-color : #ce1e1e;
-    border : #000 solid 2px;
-    border-radius : 10px;
-    z-index : -1;
-    }
-      /* Center Content and Logo */
-    .quiz-container {
-    display : flex;
-    flex-direction : column;
-    align-items : center;
-    border : #3b3b3b solid 2px;
-    padding : 20px;
-    background-color : #ffffff;
-    }
-    .logo {
-    position : absolute;
-    top : 0;
-    left : 0;
-    max-width : 500px;
-    margin-bottom : 20px;
-    }
-    h1 {
-    margin-bottom : 20px;
-    }
-    .QuizName {
-    clip-path : inset(0 0 0 40%);
-    transform : translateX(-20%);
-    pointer-events : none;
-    }
-    .options {
-    margin-bottom : 20px;
-    }
-    button {
-    padding : 10px 20px;
-    margin : 5px;
-    cursor : pointer;
-    }
-    .quiz {
-    text-align : left;
-    }
-    .nickname {
-    margin-bottom : 20px;
-    }
-    input[type="text"] {
-    padding : 8px;
-    width : 200px;
-    margin-top : 5px;
+body, html {
+font-family : Arial, sans-serif;
+margin : 0;
+padding : 0;
+max-width: 100%;
+overflow-x: hidden;
+box-sizing: border-box;
+}
+
+.background {
+  background-color : #5f16e6;
+  height : 100vh;
+  display : flex;
+  justify-content : center;
+  align-items : center;
+  width: 100%;
+}
+
+.center {
+  max-width : 95%; /* Decreased size for mobile */
+  max-height : 95%;
+  padding : 20px;
+  border-radius : 10px;
+  text-align : center;
+  background-color : white;
+  position : relative;
+  box-sizing: border-box;
+}
+
+.center::before {
+  content : "";
+  position : absolute;
+  top : -40px;
+  left : -20px;
+  width : calc(100% + 40px);
+  height : calc(100% + 40px);
+  background-color : white;
+  border : #000 solid 2px;
+  border-radius : 10px;
+  z-index : -1;
+}
+/* Center Content and Logo */
+.quiz-container {
+display : flex;
+flex-direction : column;
+align-items : center;
+border : #3b3b3b solid 2px;
+padding : auto;
+background-color : #ffffff;
+position: center;
+width: 100%;
+box-sizing: border-box;
+}
+.logo {
+width : 80%;
+position : absolute;
+top : 20px;
+left : 20px;
+margin-bottom : 20px;
+}
+h1 {
+margin-bottom : 20px;
+}
+.QuizName {
+clip-path : inset(0 0 0 40%);
+transform : translateX(-20%);
+pointer-events : none;
+}
+.options {
+margin-bottom : 20px;
+}
+button {
+padding : 10px 20px;
+margin : 5px;
+cursor : pointer;
+}
+.quiz {
+text-align : left;
+}
+.nickname {
+margin-bottom : 20px;
+}
+input[type="text"] {
+padding : 8px;
+width : 200px;
+margin-top : 5px;
     }
     /* Qusetion */
     .question {
@@ -149,39 +160,36 @@ body {
     }
     /* Optimization for other devices */
     /* Media queries for different devices */
-    @media screen and (min-width: 768px) {
-    .center {
-    width : 80%;
-    }
-    .quiz-container {
-    font-size : 1.4em;
-    }
-    button {
-    padding : 15px 30px;
-    font-size : 1.0em;
-    }
-    input[type="text"] {
-    padding : 15px;
-    width : 300px;
-    font-size : 1.0em;
-    margin-top : 15px;
-    }
-    }
-    @media screen and (min-width: 1024px) {
-    .center {
-    width : 60%;
-    }
-    .quiz-container {
-    font-size : 1.6em;
-    }
-    button {
-    padding : 20px 40px;
-    font-size : 1.2em;
-    }
-    input[type="text"] {
-    padding : 18px;
-    width : 350px;
-    font-size : 1.2em;
-    margin-top : 20px;
-    }
-    }
+/* Styles for devices with screen width 768px and more */
+@media (min-width: 768px) {
+  .logo {
+    width: 40%; /* Decreased size for larger screens */
+  }
+  .center {
+    max-width: 70%;
+    max-height: 70%;
+  }
+  .quiz-container {
+    max-width : 90%;
+    margin: 0 auto;
+  }
+}
+
+/* Styles for devices with screen width 992px and more */
+@media (min-width: 992px) {
+  .center {
+    max-width: 80%;
+    max-height: 60%;
+  }
+}
+
+/* Styles for devices with screen width 1024px and more */
+@media (min-width: 1024px) {
+  .logo {
+    width: 30%; /* Decreased size for larger screens */
+  }
+  .center {
+    max-width: 90%;
+    max-height: 50%;
+  }
+}
