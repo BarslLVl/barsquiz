@@ -255,6 +255,7 @@ function loadQuestions(topic) {
     const nextButton = document.createElement('button');
     nextButton.textContent = 'Next';
     nextButton.disabled = true;
+    nextButton.className = 'next-button';
 
     nextButton.onclick = function () {
         currentQuestionIndex++;
@@ -288,6 +289,7 @@ function loadQuestions(topic) {
     const exitButton = document.createElement('button');
     exitButton.textContent = 'Exit';
     exitButton.onclick = function() { location.reload(); };
+    exitButton.className = 'exit-button';
 
     // Then add the "Exit" button
     quizContainer.appendChild(exitButton);
@@ -379,216 +381,216 @@ function startTimer(duration, display) {
     });
   
     // Update ScoreBoard data
-    ScoreBoard.player = document.getElementById('nickname').value;
-    ScoreBoard.topic = currentTopic;
-  
-    if (currentQuestionIndex === 9) {
-      displayScoreBoard();
-    } else {
-      const nextButton = document.querySelector('button');
-      nextButton.disabled = false;
-    }
-  
-    document.getElementById('quizTitle').style.display = 'none';
-    document.getElementById('topics').style.display = 'none';
-  }
-  
-  function submitAnswer() {
-    clearInterval(interval); // Stop the timer after selecting an answer
- 
-    const radios = document.querySelectorAll('input[type="radio"]');
-    const checkedRadio = document.querySelector('input[type="radio"]:checked');
- 
-    if (!checkedRadio) {
-      // If no answer is selected, consider it incorrect
-      const timerDisplay = document.getElementById(`timer${currentQuestionIndex}`);
-      const timeOverMessage = document.createElement('p');
-      timeOverMessage.textContent = 'Time is over! Answer not submitted.';
-      timeOverMessage.className = 'wrong-answer';
-      const parentQuestion = checkedRadio.closest('.question');
-      parentQuestion.appendChild(timeOverMessage);
-      radios.forEach(radio => {
-        radio.disabled = true;
-      });
-      submitQuiz();
-      return;
-    }
- 
+ScoreBoard.player = document.getElementById('nickname').value;
+ScoreBoard.topic = currentTopic;
+
+if (currentQuestionIndex === 9) {
+  displayScoreBoard();
+} else {
+  const nextButton = document.querySelector('button');
+  nextButton.disabled = false;
+}
+
+document.getElementById('quizTitle').style.display = 'none';
+document.getElementById('topics').style.display = 'none';
+}
+
+function submitAnswer() {
+  clearInterval(interval); // Stop the timer after selecting an answer
+
+  const radios = document.querySelectorAll('input[type="radio"]');
+  const checkedRadio = document.querySelector('input[type="radio"]:checked');
+
+  if (!checkedRadio) {
+    // If no answer is selected, consider it incorrect
+    const timeOverMessage = document.createElement('p');
+    timeOverMessage.textContent = 'Time is over! Answer not submitted.';
+    timeOverMessage.className = 'wrong-answer';
+    const parentQuestion = checkedRadio.closest('.question');
+    parentQuestion.appendChild(timeOverMessage);
     radios.forEach(radio => {
       radio.disabled = true;
     });
- 
     submitQuiz();
+    return;
   }
- 
-  function ExitQuestion() {
-    currentQuestionIndex++;
- 
-    if (currentQuestionIndex >= questions[currentTopic].length) {
-      const quizContainer = document.getElementById('quiz');
-      quizContainer.innerHTML = '';
- 
-      const resultText = document.createElement('p');
-      resultText.textContent = 'End of the quiz!';
-      quizContainer.appendChild(resultText);
- 
-      const exitButton = document.createElement('button');
-      exitButton.textContent = 'Exit';
-      exitButton.onclick = function() {
-        location.reload();
-      };
- 
-      quizContainer.appendChild(exitButton);
- 
-      // Hide the title and topic selection menu
-      document.getElementById('quizTitle').style.display = 'none';
-      document.getElementById('topics').style.display = 'none';
-      return;
-    }
- 
-    loadQuestions(currentTopic);
-  }
- 
-  // Notification Bar "nickname"
-  document.getElementById('submitNickname').addEventListener('click', function() {
-    const nicknameInput = document.getElementById('nickname');
-    const nickname = nicknameInput.value;
-    const notificationBar = document.getElementById('notification-bar');
- 
-    if (!nickname) {
-      notificationBar.textContent = "OOOOPS! You forgot to enter your nickname before you started playing.";
-      notificationBar.classList.add('visible');
-      setTimeout(() => {
-        notificationBar.classList.remove('visible');
-      }, 7000);
-      return;
-    }
- 
-    // Show the container with questions
-    document.getElementById('quiz').style.display = 'block';
-    // Show buttons for selecting question topics
-    document.querySelector('.options').style.display = 'block';
-    // Hide the container for entering a nickname
-    document.querySelector('.nickname').style.display = 'none';
- 
-    loadQuestions(document.getElementById('topicOptions').value); // Load questions for the selected topic
+
+  radios.forEach(radio => {
+    radio.disabled = true;
   });
- 
-  // ScoreBoard
-  const ScoreBoard = {
-    player: '',
-    correctAnswers: 0,
-    totalQuestions: 10,
-    topic: ''
-  };
- 
-  function displayScoreBoard() {
+
+  submitQuiz();
+}
+
+function ExitQuestion() {
+  currentQuestionIndex++;
+
+  if (currentQuestionIndex >= questions[currentTopic].length) {
     const quizContainer = document.getElementById('quiz');
-    quizContainer.innerHTML = ''; // Clear the quiz container
- 
-    const scoreBoardElem = document.createElement('div');
-    scoreBoardElem.classList.add('scoreboard');
- 
-    const playerName = document.createElement('p');
-    playerName.textContent = `Player: ${ScoreBoard.player}`;
-    playerName.style.fontSize = "35px"; // Increase font size
- 
-    const correctAnswers = document.createElement('p');
-    correctAnswers.textContent = `Correct Answers: ${ScoreBoard.correctAnswers} out of ${ScoreBoard.totalQuestions}`;
-    correctAnswers.style.fontSize = "35px"; // Increase font size
- 
-    const topicPlayed = document.createElement('p');
-    topicPlayed.textContent = `Topic: ${ScoreBoard.topic}`;
-    topicPlayed.style.fontSize = "35px"; // Increase font size
- 
-    scoreBoardElem.appendChild(playerName);
-    scoreBoardElem.appendChild(correctAnswers);
-    scoreBoardElem.appendChild(topicPlayed);
- 
-    quizContainer.appendChild(scoreBoardElem);
- 
+    quizContainer.innerHTML = '';
+
+    const resultText = document.createElement('p');
+    resultText.textContent = 'End of the quiz!';
+    quizContainer.appendChild(resultText);
+
     const exitButton = document.createElement('button');
     exitButton.textContent = 'Exit';
     exitButton.onclick = function() {
       location.reload();
     };
-    // FeedBack button
+
     quizContainer.appendChild(exitButton);
 
-    const feedbackButton = document.createElement('button');
-    feedbackButton.textContent = 'Leave Feedback';
-    feedbackButton.onclick = leaveFeedback;
-   
-    quizContainer.appendChild(feedbackButton);
- 
     // Hide the title and topic selection menu
     document.getElementById('quizTitle').style.display = 'none';
     document.getElementById('topics').style.display = 'none';
+    return;
   }
 
+  loadQuestions(currentTopic);
+}
 
-  function leaveFeedback() {
-    const quizContainer = document.getElementById('quiz');
-    quizContainer.innerHTML = '';
-  
-    const feedbackForm = document.createElement('form');
-    feedbackForm.id = 'feedbackForm';
-    feedbackForm.style.display = 'flex';
-    feedbackForm.style.flexDirection = 'column';
-  
-    const feedbackLabel = document.createElement('label');
-    feedbackLabel.textContent = 'Your Feedback:';
-    feedbackLabel.style.marginBottom = '10px';
-  
-    const feedbackInput = document.createElement('textarea');
-    feedbackInput.name = 'feedback';
-    feedbackInput.rows = '4';
-    feedbackInput.required = true;
-    feedbackInput.style.width = '100%';
-    feedbackInput.style.height = '150px';
-    feedbackInput.style.fontSize = '30px';
-    feedbackInput.style.marginBottom = '10px';
-  
-    const submitButton = document.createElement('button');
-    submitButton.textContent = 'Submit Feedback';
-    submitButton.onclick = submitFeedback;
-    submitButton.style.alignSelf = 'flex-end';
-  
-    feedbackForm.appendChild(feedbackLabel);
-    feedbackForm.appendChild(feedbackInput);
-    feedbackForm.appendChild(submitButton);
-  
-    quizContainer.appendChild(feedbackForm);
-  
-    const style = document.createElement('style');
-    style.textContent = `
-      #feedbackForm textarea {
-        width: 100%;
-        height: 150px;
-        font-size: 50px;
-      }
-    `;
-    quizContainer.appendChild(style);
+// Notification Bar "nickname"
+document.getElementById('submitNickname').addEventListener('click', function() {
+  const nicknameInput = document.getElementById('nickname');
+  const nickname = nicknameInput.value;
+  const notificationBar = document.getElementById('notification-bar');
+
+  if (!nickname) {
+    notificationBar.textContent = "OOOOPS! You forgot to enter your nickname before you started playing.";
+    notificationBar.classList.add('visible');
+    setTimeout(() => {
+      notificationBar.classList.remove('visible');
+    }, 7000);
+    return;
   }
-  // Feedback
-  function submitFeedback(event) {
-    event.preventDefault();
+
+  // Show the container with questions
+  document.getElementById('quiz').style.display = 'block';
+  // Show buttons for selecting question topics
+  document.querySelector('.options').style.display = 'block';
+  // Hide the container for entering a nickname
+  document.querySelector('.nickname').style.display = 'none';
+
+  loadQuestions(document.getElementById('topicOptions').value); // Load questions for the selected topic
+});
+
+// ScoreBoard
+const ScoreBoard = {
+  player: '',
+  correctAnswers: 0,
+  totalQuestions: 10,
+  topic: ''
+};
+
+function displayScoreBoard() {
+  const quizContainer = document.getElementById('quiz');
+  quizContainer.innerHTML = ''; // Clear the quiz container
+
+  const scoreBoardElem = document.createElement('div');
+  scoreBoardElem.classList.add('scoreboard');
+
+  const playerName = document.createElement('p');
+  playerName.textContent = `Player: ${ScoreBoard.player}`;
+  playerName.style.fontSize = "35px"; // Increase font size
+
+  const correctAnswers = document.createElement('p');
+  correctAnswers.textContent = `Correct Answers: ${ScoreBoard.correctAnswers} out of ${ScoreBoard.totalQuestions}`;
+  correctAnswers.style.fontSize = "35px"; // Increase font size
+
+  const topicPlayed = document.createElement('p');
+  topicPlayed.textContent = `Topic: ${ScoreBoard.topic}`;
+  topicPlayed.style.fontSize = "35px"; // Increase font size
+
+  scoreBoardElem.appendChild(playerName);
+  scoreBoardElem.appendChild(correctAnswers);
+  scoreBoardElem.appendChild(topicPlayed);
+
+  quizContainer.appendChild(scoreBoardElem);
+
+  const exitButton = document.createElement('button');
+  exitButton.textContent = 'Exit';
+  exitButton.onclick = function() {
+  location.reload();
+  };
+  exitButton.className = 'exit-button';
+  // FeedBack button
+  quizContainer.appendChild(exitButton);
+  const feedbackButton = document.createElement('button');
+  feedbackButton.textContent = 'Leave Feedback';
+  feedbackButton.onclick = leaveFeedback;
+  feedbackButton.className = 'feedback-button';
   
-    const feedbackForm = document.getElementById('feedbackForm');
-    const feedbackText = feedbackForm.elements.feedback.value;
-  
-    const quizContainer = document.getElementById('quiz');
-    quizContainer.innerHTML = '';
-  
-    const feedbackThanks = document.createElement('p');
-    feedbackThanks.textContent = 'Thank you for your feedback!';
-  
-    const exitButton = document.createElement('button');
-    exitButton.textContent = 'Exit';
-    exitButton.onclick = function () {
-      location.reload();
-    };
-  
-    quizContainer.appendChild(feedbackThanks);
-    quizContainer.appendChild(exitButton);
-  }
+  quizContainer.appendChild(feedbackButton);
+
+  // Hide the title and topic selection menu
+  document.getElementById('quizTitle').style.display = 'none';
+  document.getElementById('topics').style.display = 'none';
+}
+function leaveFeedback() {
+  const quizContainer = document.getElementById('quiz');
+  quizContainer.innerHTML = '';
+
+  const feedbackForm = document.createElement('form');
+  feedbackForm.id = 'feedbackForm';
+  feedbackForm.style.display = 'flex';
+  feedbackForm.style.flexDirection = 'column';
+
+  const feedbackLabel = document.createElement('label');
+  feedbackLabel.textContent = 'Your Feedback:';
+  feedbackLabel.style.marginBottom = '10px';
+
+  const feedbackInput = document.createElement('textarea');
+  feedbackInput.name = 'feedback';
+  feedbackInput.rows = '4';
+  feedbackInput.required = true;
+  feedbackInput.style.width = '100%';
+  feedbackInput.style.height = '150px';
+  feedbackInput.style.fontSize = '30px';
+  feedbackInput.style.marginBottom = '10px';
+
+  const submitButton = document.createElement('button');
+  submitButton.textContent = 'Submit Feedback';
+  submitButton.onclick = submitFeedback;
+  submitButton.style.alignSelf = 'flex-end';
+
+  feedbackForm.appendChild(feedbackLabel);
+  feedbackForm.appendChild(feedbackInput);
+  feedbackForm.appendChild(submitButton);
+
+  quizContainer.appendChild(feedbackForm);
+
+  const style = document.createElement('style');
+  style.textContent = `
+    #feedbackForm textarea {
+      width: 100%;
+      height: 150px;
+      font-size: 50px;
+    }
+  `;
+  quizContainer.appendChild(style);
+}
+
+// Feedback
+function submitFeedback(event) {
+  event.preventDefault();
+
+  const feedbackForm = document.getElementById('feedbackForm');
+  const feedbackText = feedbackForm.elements.feedback.value;
+
+  const quizContainer = document.getElementById('quiz');
+  quizContainer.innerHTML = '';
+
+  const feedbackThanks = document.createElement('p');
+  feedbackThanks.textContent = 'Thank you for your feedback!';
+
+  const exitButton = document.createElement('button');
+  exitButton.textContent = 'Exit';
+  exitButton.onclick = function () {
+    location.reload();
+  };
+  exitButton.className = 'exit-button';
+
+  quizContainer.appendChild(feedbackThanks);
+  quizContainer.appendChild(exitButton);
+}
