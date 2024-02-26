@@ -492,15 +492,15 @@ function displayScoreBoard() {
 
   const playerName = document.createElement('p');
   playerName.textContent = `Player: ${ScoreBoard.player}`;
-  playerName.style.fontSize = "35px"; // Increase font size
+  playerName.style.fontSize = "35px";
 
   const correctAnswers = document.createElement('p');
   correctAnswers.textContent = `Correct Answers: ${ScoreBoard.correctAnswers} out of ${ScoreBoard.totalQuestions}`;
-  correctAnswers.style.fontSize = "35px"; // Increase font size
+  correctAnswers.style.fontSize = "35px";
 
   const topicPlayed = document.createElement('p');
   topicPlayed.textContent = `Topic: ${ScoreBoard.topic}`;
-  topicPlayed.style.fontSize = "35px"; // Increase font size
+  topicPlayed.style.fontSize = "35px";
 
   scoreBoardElem.appendChild(playerName);
   scoreBoardElem.appendChild(correctAnswers);
@@ -514,8 +514,8 @@ function displayScoreBoard() {
   location.reload();
   };
   exitButton.className = 'exit-button';
-  // FeedBack button
   quizContainer.appendChild(exitButton);
+    // FeedBack button
   const feedbackButton = document.createElement('button');
   feedbackButton.textContent = 'Leave Feedback';
   feedbackButton.onclick = leaveFeedback;
@@ -583,6 +583,7 @@ function submitFeedback(event) {
 
   const feedbackThanks = document.createElement('p');
   feedbackThanks.textContent = 'Thank you for your feedback!';
+  feedbackThanks.style.fontSize = '20px';
 
   const exitButton = document.createElement('button');
   exitButton.textContent = 'Exit';
