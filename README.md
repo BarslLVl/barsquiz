@@ -1,9 +1,10 @@
-# BarsQuiz
+
+**# BarsQuiz
 BarsQuiz is a game that will help you, or you and your friends/colleagues or family members, spend time playing together in an entertaining and informative way. When you go to the site, you have the opportunity to write your “nickname”, after which you can select any topic from the list, such as “Sports, Movies, Games, Math”, each of these topics has 10 different questions associated with one of these topics, as well as 4 answer choices of which only 1 is correct. But also during this game you only have 10 seconds to choose an answer, which means that you have a limited time for each question.
 
 Users of this game can find out how well they know each topic (optional), which may have different questions with each topic. This site will be aimed at both adults and children, and will become a simple application for practice and entertainment, it can also be for learning, if a person does not know the answers, he can check which is correct (this will only show when choosing the correct answer, in order so that a person would try to guess which one is correct without writing down the answers somewhere in a notebook and the like)
 
-![Main](assets/Readme-photo/Main.png)
+![Main](assets/gallery/readme-photo/main.png)
 The live link can be found here - [BarsQuiz](https://barsllvl.github.io/barsquiz/).
 
 ## Features
@@ -12,32 +13,34 @@ The live link can be found here - [BarsQuiz](https://barsllvl.github.io/barsquiz
     - In the middle of the page where all the content is located, the title of the game “BarsQuiz” is indicated in the game font.
     - This title clearly tells the user what game they are currently playing.
 
-        ![Header](assets/Readme-photo/Header.png)
+        ![Header](assets/gallery/readme-photo/header.png)
 
 - Main page
     - On the main page the user is given the opportunity to write his nickname.
-    ![mnpage1](assets/Readme-photo/mnpage1.png)
+    ![mnpage1](assets/gallery/readme-photo/mnpage1.png)
     - If the user has not written a nickname, the system warns about this by showing a message at the bottom.
-    ![mgpage2](assets/Readme-photo/mnpage2.png)
+    ![mgpage2](assets/gallery/readme-photo/mnpage2.png)
 
 - Game Options
     - User can select any topic from the list, such as “Sports, Movies, Games, Math”
-    ![Topic](assets/Readme-photo/Topic.png)
-    - After selecting the topic, the user will be presented with 10 questions, each of which has 4 answer choices of which only 1 is correct. But also for each answer you are given 10 seconds to choose an answer. 
-    ![Question](assets/Readme-photo/Choice.png)
+
+    ![Topic](assets/gallery/readme-photo/topic.png)
+    - After selecting the topic, the user will be presented with 10 questions, each of which has 4 answer choices of which only 1 is correct. But also for each answer you are given 10 seconds to choose an answer.
+
+    ![Question](assets/gallery/readme-photo/choice.png)
     - After selecting an answer, the user will be shown whether he answered correctly or not. But if you choose the wrong answer, the correct answer itself will not be shown, so that a person can personally guess, or personally find out the answer to a particular question, and thereby interest the person.
-    ![CorrectAnsw](assets/Readme-photo/CorrectAnsw.png)
-    ![IncorrectAnsw](assets/Readme-photo/IncorrectAnsw.png)
+    ![CorrectAnsw](assets/gallery/readme-photo/correctAnsw.png)
+    ![IncorrectAnsw](assets/gallery/readme-photo/incorrectAnsw.png)
     - If within 10 seconds the user does not have time to select an answer, the system will automatically write a message just below in red.
-    ![no-answer](assets/Readme-photo/no-answer.png)
+    ![no-answer](assets/gallery/readme-photo/no-answer.png)
 - The Game Results(Scoreboard)
     - After finishing the game, the user will be presented with a scoreboard, which will show the user how well they know each topic.
-    - The JavaScript code automatically calculates the correct answers that were selected by the user from all 10 questions and in the Scoreboard shows the user's nickname that was written at the very beginning, the number of correct answers out of 10, and what topic was selected
-    ![scoreboard](assets/Readme-photo/scoreboard.png)
+    - The JavaScript code automatically calculates the correct answers that were selected by the user from all 10 questions and in the Scoreboard shows the user's nickname that was written at the very beginning, the number of correct answers out of 10, and what topic was selected.
+    - ![scoreboard](assets/gallery/readme-photo/scoreboard.png)
 
 - Feedback
     - The user can write his feedback about the game, this feedback will be sent to the developer.
-    ![Feedback](assets/Readme-photo/feedback.png)
+    ![Feedback](assets/gallery/readme-photo/feedback.png)
 ## Features Left to Implement
 - When there is time, I would like to add new topics and questions (with images) for this game.
 ## Testing
@@ -46,7 +49,7 @@ The live link can be found here - [BarsQuiz](https://barsllvl.github.io/barsquiz
 - I confirmed that the game works properly on all the devices and browsers.
 - I confirmed that header, options, results, feedback, and questions are working properly.
 - I confirmed that the colors and fonts chosen are easy to read and accessible by all users.
-![testing](assets/Readme-photo/testing.png)
+- ![testing](assets/gallery/readme-photo/testing.png)
 - I confirmed that project is responsive, looks good and functions on all devices/screens.
 ## Bugs
 ### Solved bugs
@@ -99,4 +102,4 @@ The live link can be found here - [BarsQuiz](https://barsllvl.github.io/barsquiz
  - Videos that helped me with the code [YouTube1](https://www.youtube.com/watch?v=PBcqGxrr9g8&ab_channel=GreatStack), [Youtube2](https://www.youtube.com/watch?v=riDzcEQbX6k&ab_channel=WebDevSimplified) and [YouTube3](https://www.youtube.com/watch?v=Vp8x8-reqZA&ab_channel=Codehal)
 ### Media
 - To create my logo I used [myfreelogomaker](https://myfreelogomaker.com).
-- 404 image, wireframes taken from [pngtree](https://pngtree.com) and [Istock](https://www.istockphoto.com/illustrations/computer-sketch-desktop-pc-desk) 
+- 404 image, wireframes taken from [pngtree](https://pngtree.com) and [Istock](https://www.istockphoto.com/illustrations/computer-sketch-desktop-pc-desk)
