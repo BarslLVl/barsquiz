@@ -22,15 +22,117 @@ html {
 
 /* Centered Content */
 .center {
-  max-width: 95%;
-  max-height: 95%;
+  width: auto;
+  height: auto;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 15px;
   text-align: center;
   background-color: white;
   position: relative;
-  overflow-y: scroll;
   box-sizing: border-box;
+}
+
+/* Remove default bullets from radio options */
+.question ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* Option container styles */
+.question ul li {
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 12px;
+  background-color: #f5f5f5;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: 2px solid transparent;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Hide default radio input */
+.question ul li input[type="radio"] {
+  display: none;
+}
+
+/* Custom block for radio button */
+.question ul li label::before {
+  content: "";
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 12px;
+  transition: background-color 0.3s, box-shadow 0.3s ease;
+}
+
+/* Label inside the option */
+.question ul li label {
+  font-size: 1.2em;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  flex-grow: 1;
+  z-index: 1;
+}
+
+/* Hover effect */
+.question ul li:hover {
+  background-color: #e9ecef;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+}
+
+/* Custom styles when option is checked */
+.question ul li input[type="radio"]:checked+label {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+  border: 2px solid #007bff;
+}
+
+/* Timer Styles */
+.timer-container {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+}
+
+.timer-svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 2.8;
+}
+
+.circle {
+  fill: none;
+  stroke-width: 2.8;
+  stroke: #4caf50;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s linear;
+}
+
+.timer-text {
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #333;
 }
 
 .center::before {
@@ -54,6 +156,105 @@ html {
   background-color: #ffffff;
   width: 100%;
 }
+
+/* Remove default bullet points */
+.quiz-container ul {
+  list-style-type: none;
+  /* Remove default bullet points */
+  padding-left: 0;
+}
+
+/* Make the list items stack vertically */
+.question ul li {
+  display: block;
+  /* Ensures that each option is in its own line */
+  margin-bottom: 15px;
+  transition: box-shadow 0.4s ease, transform 0.3s ease;
+  border-radius: 12px;
+}
+
+/* Hide default radio buttons */
+input[type="radio"] {
+  display: none;
+  /* Hide default radio buttons */
+}
+
+/* Label design for radio buttons */
+input[type="radio"]+label {
+  position: relative;
+  display: block;
+  /* Make each label a block element so they stack */
+  padding: 15px 25px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #333;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+  /* Add visible border */
+  transition: all 0.4s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  /* Align text to the left */
+}
+
+/* Different colors for each label */
+.question ul li:nth-child(1) label {
+  background-color: #FF9AA2;
+}
+
+.question ul li:nth-child(2) label {
+  background-color: #FFB7B2;
+}
+
+.question ul li:nth-child(3) label {
+  background-color: #FFDAC1;
+}
+
+.question ul li:nth-child(4) label {
+  background-color: #E2F0CB;
+}
+
+/* Hover effect with slight color change */
+input[type="radio"]+label:hover {
+  opacity: 0.9;
+  box-shadow: 0 6px 18px rgba(37, 117, 252, 0.2);
+  border-color: #2575fc;
+  /* Highlight border on hover */
+}
+
+/* Checked state for radio button */
+input[type="radio"]:checked+label {
+  background: linear-gradient(135deg, #2575fc, #6a11cb);
+  color: white;
+  font-weight: bold;
+  border-color: #2575fc;
+  /* Visible border for checked state */
+  box-shadow: 0 8px 20px rgba(37, 117, 252, 0.4);
+  transform: scale(1.03);
+}
+
+/* Hover effect on the entire option block */
+.question ul li:hover {
+  box-shadow: 0 8px 20px rgba(0, 123, 255, 0.25);
+  transform: translateY(-4px);
+}
+
+/* Label text styling */
+.question ul li label {
+  font-size: 1.2em;
+  cursor: pointer;
+  flex-grow: 1;
+  transition: color 0.4s ease;
+  padding-left: 20px;
+  position: relative;
+}
+
+/* Change the label text color when checked */
+.question ul li input[type="radio"]:checked+label {
+  color: white;
+  font-weight: bold;
+}
+
 
 /* Scrollbar Styling */
 .center::-webkit-scrollbar {
@@ -86,6 +287,9 @@ h1 {
   clip-path: inset(0 0 0 40%);
   transform: translateX(-20%);
   pointer-events: none;
+  width: 400px;
+  height: auto;
+  object-fit: cover;
 }
 
 /* Button Styles */
@@ -106,77 +310,69 @@ button:hover {
   background-color: #1c37af;
 }
 
-/* Feedback Styles */
+/* Feedback Form */
 .feedback-form {
   display: flex;
   flex-direction: column;
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.1);
-  background-color: #f8f8f8;
+  align-items: center;
 }
 
 .feedback-label {
-  font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 .feedback-input {
   width: 100%;
-  height: 150px;
   padding: 10px;
-  font-size: 1.5em;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+  font-size: 1em;
   margin-bottom: 10px;
-  resize: vertical;
 }
 
-.feedback-thanks {
-  font-size: 2em;
-  text-align: center;
-  text-shadow: #021772 0px 0px 2px;
-  margin-top: 20px;
-  color: #1c37af;
-  font-weight: bold;
+.feedback-button {
+  background-color: orangered;
+  border: none;
+  padding: 10px;
+  color: white;
+  cursor: pointer;
 }
 
-/* Scoreboard Style */
-.scoreboard {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.1);
-  background-color: #f8f8f8;
+.feedback-button:hover {
+  background-color: darkred;
 }
 
-.scoreboard p {
+/* Thank You Message */
+.thank-you-message {
   font-size: 1.5em;
-  line-height: 1.2;
-  color: #007BFF;
-  text-align: left;
+  color: green;
+  text-align: center;
 }
 
-.scoreboard p:first-child {
-  margin-top: 0;
-}
-
-.scoreboard p:last-child {
-  margin-bottom: 0;
+/* Scoreboard Styles */
+.scoreboard p {
+  font-size: 1.2em;
+  margin-bottom: 10px;
 }
 
 .scoreboard span {
-  color: #0052aa;
+  color: blue;
   font-weight: bold;
 }
 
+/* Header styles */
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
+/* Welcome text style */
+#welcome-text {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
 
-/* Specific Button Styles */
+/* Button Variants */
 .next-button,
 .exit-button,
 .feedback-button {
@@ -212,14 +408,10 @@ button:hover {
 .nickname,
 .question {
   text-align: left;
-}
-
-.nickname,
-.question {
   margin-bottom: 20px;
 }
 
-input[type='text'] {
+.nickname input[type='text'] {
   padding: 8px;
   width: 200px;
   margin-top: 5px;
@@ -229,27 +421,17 @@ input[type='text'] {
   margin: 0;
 }
 
-.question ul {
-  list-style: none;
-  padding: 0;
-}
-
-.question ul li {
-  margin-bottom: 10px;
-}
-
-.question ul li label {
-  background-color: #f0f0f0;
-  cursor: pointer;
-}
-
 /* Correct/Wrong Answer Styles */
 .correct-answer {
   color: green;
+  font-weight: bold;
+  margin-top: 10px;
 }
 
 .wrong-answer {
   color: red;
+  font-weight: bold;
+  margin-top: 10px;
 }
 
 /* Notification Bar */
@@ -273,6 +455,7 @@ input[type='text'] {
   transform: translateY(0);
 }
 
+/* Screen Reader Only */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -284,6 +467,45 @@ input[type='text'] {
   border: 0;
 }
 
+/* Timer Container */
+.timer-container {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+}
+
+.timer-svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 2.8;
+}
+
+.circle {
+  fill: none;
+  stroke-width: 2.8;
+  stroke: #4caf50;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s linear;
+}
+
+/* Timer text */
+.timer-text {
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #333;
+}
 
 /* Responsive Design Adjustments */
 @media (max-width: 600px) {
@@ -292,8 +514,8 @@ input[type='text'] {
   }
 
   .center {
-    max-width: 90%;
-    max-height: 90%;
+    width: auto;
+    height: auto;
   }
 
   .QuizName {
@@ -303,7 +525,6 @@ input[type='text'] {
   #welcome-text {
     font-size: 27px;
   }
-
 }
 
 @media (min-width: 768px) {
@@ -312,8 +533,8 @@ input[type='text'] {
   }
 
   .center {
-    max-width: 70%;
-    max-height: 70%;
+    width: auto;
+    height: auto;
   }
 
   .quiz-container {
@@ -324,8 +545,8 @@ input[type='text'] {
 
 @media (min-width: 992px) {
   .center {
-    max-width: 80%;
-    max-height: 60%;
+    width: auto;
+    height: auto;
   }
 
   .QuizName {
@@ -339,7 +560,7 @@ input[type='text'] {
 
 @media only screen and (orientation: landscape) {
   .center {
-    max-width: 70%;
+    max-width: auto;
   }
 }
 
@@ -349,8 +570,8 @@ input[type='text'] {
   }
 
   .center {
-    max-width: 90%;
-    max-height: 50%;
+    width: auto;
+    height: auto;
   }
 
   .QuizName {

@@ -12,7 +12,7 @@
   <header>
     <nav>
       <a href="index.html">
-        <img src="assets/gallery/logo-Files/for-Web/svg/White logo - no background.svg" alt="Logo" class="logo">
+        <img src="assets/gallery/logo-files/for-web/png/whitelogo-nobackground.png" alt="Logo" class="logo">
       </a>
     </nav>
   </header>
@@ -22,37 +22,42 @@
         <header>
           <h1 id="welcome-text">Welcome to</h1>
           <h1 id="quiz-title">
-            <img src="assets/gallery/logo-Files/for-Web/svg/ColorLogo-nobackground.svg" alt="QuizName" class="QuizName"
-              style="width: 500px; height: auto; object-fit: cover;">
+            <img src="assets/gallery/logo-files/for-web/svg/colorlogo-nobackground.svg" alt="QuizName" class="QuizName">
           </h1>
         </header>
+
+        <!-- Nickname input -->
         <section class="nickname">
           <label for="nickname" class="sr-only">Enter your nickname:</label>
           <input type="text" id="nickname" placeholder="Enter your nickname">
           <button id="submitNickname">Submit</button>
         </section>
+
         <div id="notification-bar"></div>
-        <section class="options" id="topicOptions" style="display: none;">
-          <button onclick="loadQuestions('Sports')">Sports</button>
-          <button onclick="loadQuestions('Movies')">Movies</button>
-          <button onclick="loadQuestions('Games')">Games</button>
-          <button onclick="loadQuestions('Math')">Math</button>
+
+        <section class="options" id="topicOptions" style="display: none;"></section>
+
+        <section class="quiz-layout" id="quiz-layout" style="display: none;">
+          <div class="question-container" id="quiz"></div>
+
+          <!-- Timer section -->
+          <div class="timer-container" id="timer-container">
+            <svg class="timer-svg" viewBox="0 0 36 36">
+              <path class="circle-bg" d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="circle" stroke-dasharray="100, 100" d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831" />
+            </svg>
+            <div class="timer-text" id="timer">10</div>
+          </div>
         </section>
-        <section class="quiz" id="quiz" style="display: none;"></section>
-        <footer>
-          <p id="timer"></p>
-        </footer>
+
       </article>
     </section>
   </main>
   <script src="assets/js/script.js"></script>
-  <script>
-    // Code that hides "Welcome to" after entering a nickname
-    document.getElementById('submitNickname').addEventListener('click', function () {
-      const welcomeText = document.getElementById('welcome-text');
-      welcomeText.style.display = 'none'; // Hide "Welcome to"
-    });
-  </script>
 </body>
 
 </html>

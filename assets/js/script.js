@@ -211,45 +211,111 @@ const questions = {
 };
 
 
-let interval;
-let currentQuestionIndex = 0;
-let currentTopic = '';
-let autoSwitchTimeout;
 
+let currentQuestionIndex = 0;
+let correctAnswers = 0;
+let totalQuestions = 0;
+let interval;
+let currentTopic = '';
+let timerRunning = false;
+
+// Handle nickname submission and show topics
+document.getElementById('submitNickname').addEventListener('click', function () {
+  const nicknameInput = document.getElementById('nickname').value.trim();
+  const notificationBar = document.getElementById('notification-bar');
+  const welcomeText = document.getElementById('welcome-text');
+  const topicOptions = document.getElementById('topicOptions');
+  const nicknameSection = document.querySelector('.nickname');
+
+  if (!nicknameInput) {
+    notificationBar.textContent = "OOOOPS! You forgot to enter your nickname before you started playing.";
+    notificationBar.classList.add('visible');
+    setTimeout(() => {
+      notificationBar.classList.remove('visible');
+    }, 3000);
+  } else {
+    welcomeText.style.display = 'none';
+    nicknameSection.style.display = 'none';
+    topicOptions.style.display = 'block';
+  }
+});
+
+// Dynamically create topic buttons based on available topics
+function createTopicButtons() {
+  const topics = Object.keys(questions);
+  const topicOptionsContainer = document.getElementById('topicOptions');
+
+  topicOptionsContainer.innerHTML = '';
+
+  topics.forEach(topic => {
+    const button = document.createElement('button');
+    button.textContent = topic;
+    button.className = 'topic-button';
+    button.onclick = () => loadQuestions(topic);
+    topicOptionsContainer.appendChild(button);
+  });
+}
+
+// Load questions for the selected topic
 function loadQuestions(topic) {
   currentTopic = topic;
   const quizContainer = document.getElementById('quiz');
   const topicQuestions = questions[topic];
 
+  currentQuestionIndex = 0;
+  totalQuestions = topicQuestions.length;
+  document.getElementById('topicOptions').style.display = 'none';
+  document.getElementById('quiz-layout').style.display = 'block';
+  document.getElementById('timer-container').style.display = 'block';
+
+  quizContainer.innerHTML = ''; // Clear previous content
+
+  // Load the first question
+  displayQuestion(topicQuestions[currentQuestionIndex]);
+}
+
+function displayQuestion(questionObj) {
+  clearTimeout(interval);
+  const quizContainer = document.getElementById('quiz');
   quizContainer.innerHTML = '';
 
   const questionElem = document.createElement('div');
   questionElem.classList.add('question');
 
   const questionTitle = document.createElement('h3');
-  questionTitle.textContent = `Question ${currentQuestionIndex + 1}: ${topicQuestions[currentQuestionIndex].question}`;
+  questionTitle.textContent = `Question ${currentQuestionIndex + 1}: ${questionObj.question}`;
+  questionElem.appendChild(questionTitle);
 
+  // Create list of options
   const optionsList = document.createElement('ul');
-
-  topicQuestions[currentQuestionIndex].options.forEach((opt, optIndex) => {
-    const option = document.createElement('li');
+  questionObj.options.forEach((opt, optIndex) => {
+    const optionElem = document.createElement('li');
 
     const radioInput = document.createElement('input');
     radioInput.setAttribute('type', 'radio');
     radioInput.setAttribute('name', `question${currentQuestionIndex}`);
     radioInput.setAttribute('id', `option${optIndex}`);
     radioInput.setAttribute('value', opt);
-    radioInput.dataset.answer = topicQuestions[currentQuestionIndex].answer;
-    radioInput.onclick = submitAnswer;
+    radioInput.dataset.answer = questionObj.answer;
 
     const label = document.createElement('label');
     label.setAttribute('for', `option${optIndex}`);
     label.textContent = opt;
 
-    option.appendChild(radioInput);
-    option.appendChild(label);
-    optionsList.appendChild(option);
+    optionElem.appendChild(radioInput);
+    optionElem.appendChild(label);
+    optionsList.appendChild(optionElem);
+
+    // Enable "Next" button when an option is selected and validate answer
+    radioInput.addEventListener('change', function () {
+      document.querySelector('.next-button').disabled = false;
+      validateAnswer(radioInput.value, radioInput.dataset.answer);
+      stopTimer(); // Stop the timer when the answer is selected
+    });
   });
+
+  quizContainer.appendChild(questionElem);
+  quizContainer.appendChild(optionsList);
 
   // Add "Next" button
   const nextButton = document.createElement('button');
@@ -259,159 +325,97 @@ function loadQuestions(topic) {
 
   nextButton.onclick = function () {
     currentQuestionIndex++;
-    loadQuestions(currentTopic);
+    if (currentQuestionIndex < questions[currentTopic].length) {
+      displayQuestion(questions[currentTopic][currentQuestionIndex]);
+    } else {
+      displayScoreBoard(); // Show scoreboard when all questions are done
+    }
   };
 
-  // Add a check for option selection to enable the "Next" button
-  optionsList.addEventListener('change', function () {
-    nextButton.disabled = false;
-  });
-
-  questionElem.appendChild(questionTitle);
-  questionElem.appendChild(optionsList);
-  questionElem.appendChild(nextButton);
-
-  // Hide the block with topic options
-  topicOptions.style.display = 'none';
-
-  // Show the quiz container
-  quizContainer.style.display = 'block';
-
-  const timerDisplay = document.createElement('span');
-  timerDisplay.id = `timer${currentQuestionIndex}`;
-
-  questionElem.appendChild(questionTitle);
-  questionElem.appendChild(optionsList);
-  questionElem.appendChild(timerDisplay);
-
-  quizContainer.appendChild(questionElem);
-
-  const exitButton = document.createElement('button');
-  exitButton.textContent = 'Exit';
-  exitButton.onclick = function () { location.reload(); };
-  exitButton.className = 'exit-button';
-
-  // Then add the "Exit" button
-  quizContainer.appendChild(exitButton);
-
-  // First add the "Next" button
   quizContainer.appendChild(nextButton);
 
-  const tenSeconds = 10;
-  startTimer(tenSeconds, timerDisplay);
-
-  // Hide the title and question selection menu
-  document.getElementById('quizTitle').style.display = 'none';
-  document.getElementById('topics').style.display = 'none';
-}
-
-// Check the answer to the question and switch to the next question
-function loadNextQuestion() {
-  currentQuestionIndex++;
-  if (currentQuestionIndex >= questions[currentTopic].length) {
-    // If it's the last question, go to the scoreboard
+  // Add "Exit" button
+  const exitButton = document.createElement('button');
+  exitButton.textContent = 'Exit';
+  exitButton.className = 'exit-button';
+  exitButton.onclick = function () {
     displayScoreBoard();
-  } else {
-    loadQuestions(currentTopic);
-  }
+  };
+  quizContainer.appendChild(exitButton);
+
+  // Timer logic
+  const timerDisplay = document.getElementById('timer');
+  startTimer(10, timerDisplay);
 }
 
-// Start the timer for each question
+// Timer function
 function startTimer(duration, display) {
   let timer = duration;
+  stopTimer();
   interval = setInterval(function () {
-    const minutes = parseInt(timer / 60, 10);
-    const seconds = parseInt(timer % 60, 10);
-    const minutesStr = minutes < 10 ? `0${minutes}` : `${minutes}`;
-    const secondsStr = seconds < 10 ? `0${seconds}` : `${seconds}`;
+    const seconds = timer % 60;
 
-    display.textContent = `${minutesStr}:${secondsStr}`;
+    display.textContent = `${seconds}`;
+
+    const percentage = (timer / duration) * 100;
+    document.querySelector('.circle').style.strokeDasharray = `${percentage}, 100`;
 
     if (--timer < 0) {
-      clearInterval(interval);
-      display.textContent = '00:00'; // Display 00:00 after the end of time
-
-      const radios = document.querySelectorAll('input[type="radio"]');
-      radios.forEach(radio => {
-        radio.disabled = true; // Disable radio buttons after time expires
-      });
-
-      const timerDisplay = document.getElementById(`timer${currentQuestionIndex}`);
-      const timeUpMessage = document.createElement('p');
-      timeUpMessage.textContent = 'Time is up! The answer is automatically counted as incorrect. You will be automatically switched to the next page within 5 seconds!';
-      timeUpMessage.style.color = 'red';
-      timeUpMessage.className = 'wrong-answer';
-      timerDisplay.parentNode.appendChild(timeUpMessage);
-
-      // Display next question automatically after time has expired
-      setTimeout(loadNextQuestion, 5000); // Is the delay time before the next question is automatically loaded (in milliseconds)
+      stopTimer();
+      display.textContent = '0';
+      submitAnswer(); // Automatically submit if time is up
     }
   }, 1000);
 }
 
-
-
-
-
-
-function submitQuiz() {
-  clearInterval(interval);
-
-  const quizContainer = document.getElementById('quiz');
-  const radios = quizContainer.querySelectorAll('input[type="radio"]:checked');
-
-  radios.forEach(radio => {
-    const parentQuestion = radio.closest('.question');
-    const userAnswer = radio.value;
-
-    if (radio.dataset.answer === userAnswer) {
-      const correctAnswer = document.createElement('p');
-      correctAnswer.textContent = 'Correct!';
-      correctAnswer.className = 'correct-answer';
-      parentQuestion.appendChild(correctAnswer);
-      ScoreBoard.correctAnswers += 1;
-    } else {
-      const wrongAnswer = document.createElement('p');
-      wrongAnswer.textContent = 'Incorrect!';
-      wrongAnswer.className = 'wrong-answer';
-      parentQuestion.appendChild(wrongAnswer);
-    }
-
-    radio.disabled = true;
-  });
-
-  // Update ScoreBoard data
-  ScoreBoard.player = document.getElementById('nickname').value;
-  ScoreBoard.topic = currentTopic;
-
-  if (currentQuestionIndex === 9) {
-    displayScoreBoard();
-  } else {
-    const nextButton = document.querySelector('button');
-    nextButton.disabled = false;
+// Stop the timer and clear the interval
+function stopTimer() {
+  if (interval) {
+    clearInterval(interval);
+    interval = null;
   }
-
-  document.getElementById('quizTitle').style.display = 'none';
-  document.getElementById('topics').style.display = 'none';
 }
 
-function submitAnswer() {
-  clearInterval(interval); // Stop the timer after selecting an answer
+// Validate the answer as soon as a selection is made
+function validateAnswer(userAnswer, correctAnswer) {
+  const quizContainer = document.getElementById('quiz');
+  const resultMessage = document.createElement('p');
 
+  if (userAnswer === correctAnswer) {
+    resultMessage.textContent = 'Correct!';
+    resultMessage.classList.add('correct-answer');
+    correctAnswers++;
+  } else {
+    resultMessage.textContent = 'Incorrect!';
+    resultMessage.classList.add('wrong-answer');
+  }
+
+  quizContainer.appendChild(resultMessage);
+}
+
+// Function to handle answer submission when time runs out
+function submitAnswer() {
+  stopTimer(); // Ensure the timer stops
   const radios = document.querySelectorAll('input[type="radio"]');
   const checkedRadio = document.querySelector('input[type="radio"]:checked');
+  const quizContainer = document.getElementById('quiz');
 
   if (!checkedRadio) {
-    // If no answer is selected, consider it incorrect
     const timeOverMessage = document.createElement('p');
-    timeOverMessage.textContent = 'Time is over! Answer not submitted.';
+    timeOverMessage.textContent = 'Time is up! The answer is automatically counted as incorrect. You will be automatically switched to the next page within 5 seconds!';
     timeOverMessage.className = 'wrong-answer';
-    const parentQuestion = checkedRadio.closest('.question');
-    parentQuestion.appendChild(timeOverMessage);
+
+    // Clear any existing time-up messages to avoid duplicates
+    const existingMessages = document.querySelectorAll('.wrong-answer');
+    existingMessages.forEach(message => message.remove());
+
+    quizContainer.appendChild(timeOverMessage);
+
     radios.forEach(radio => {
       radio.disabled = true;
     });
-    submitQuiz();
+
+    setTimeout(loadNextQuestion, 5000); // Automatically go to the next question after 5 seconds
     return;
   }
 
@@ -419,146 +423,107 @@ function submitAnswer() {
     radio.disabled = true;
   });
 
-  submitQuiz();
+  document.querySelector('.next-button').disabled = false;
 }
 
-function ExitQuestion() {
+// Load the next question after timeout or selection
+function loadNextQuestion() {
   currentQuestionIndex++;
-
-  if (currentQuestionIndex >= questions[currentTopic].length) {
-    const quizContainer = document.getElementById('quiz');
-    quizContainer.innerHTML = '';
-
-    const resultText = document.createElement('p');
-    resultText.textContent = 'End of the quiz!';
-    quizContainer.appendChild(resultText);
-
-    const exitButton = document.createElement('button');
-    exitButton.textContent = 'Exit';
-    exitButton.onclick = function () {
-      location.reload();
-    };
-
-    quizContainer.appendChild(exitButton);
-
-    // Hide the title and topic selection menu
-    document.getElementById('quizTitle').style.display = 'none';
-    document.getElementById('topics').style.display = 'none';
-    return;
+  if (currentQuestionIndex < questions[currentTopic].length) {
+    displayQuestion(questions[currentTopic][currentQuestionIndex]);
+  } else {
+    displayScoreBoard();
   }
-
-  loadQuestions(currentTopic);
 }
 
-// Notification Bar "nickname"
-document.getElementById('submitNickname').addEventListener('click', function () {
-  const nicknameInput = document.getElementById('nickname');
-  const nickname = nicknameInput.value;
-  const notificationBar = document.getElementById('notification-bar');
-
-  if (!nickname) {
-    notificationBar.textContent = "OOOOPS! You forgot to enter your nickname before you started playing.";
-    notificationBar.classList.add('visible');
-    setTimeout(() => {
-      notificationBar.classList.remove('visible');
-    }, 7000);
-    return;
-  }
-
-  // Show the container with questions
-  document.getElementById('quiz').style.display = 'block';
-  // Show buttons for selecting question topics
-  document.querySelector('.options').style.display = 'block';
-  // Hide the container for entering a nickname
-  document.querySelector('.nickname').style.display = 'none';
-
-  loadQuestions(document.getElementById('topicOptions').value); // Load questions for the selected topic
-});
-
-// ScoreBoard
-const ScoreBoard = {
-  player: '',
-  correctAnswers: 0,
-  totalQuestions: 10,
-  topic: ''
-};
-
+// Display the Scoreboard
 function displayScoreBoard() {
+  stopTimer(); // Stop the timer in the scoreboard view
+  document.getElementById('timer-container').style.display = 'none';
   const quizContainer = document.getElementById('quiz');
-  quizContainer.innerHTML = ''; // Clear the quiz container
+  quizContainer.innerHTML = '';
+
   const scoreBoardElem = document.createElement('div');
   scoreBoardElem.classList.add('scoreboard');
 
-  const playerName = document.createElement('p');
-  playerName.innerHTML = `<span>Player:</span> ${ScoreBoard.player}`;
-  const correctAnswers = document.createElement('p');
-  correctAnswers.innerHTML = `<span>Correct Answers:</span> ${ScoreBoard.correctAnswers} out of ${ScoreBoard.totalQuestions}`;
-  const topicPlayed = document.createElement('p');
-  topicPlayed.innerHTML = `<span>Topic:</span> ${ScoreBoard.topic}`;
+  const playerName = document.getElementById('nickname').value;
+  const scoreText = document.createElement('p');
+  scoreText.innerHTML = `<span>Player:</span> ${playerName} <br> <span>Correct Answers:</span> ${correctAnswers} out of ${totalQuestions} <br> <span>Topic:</span> ${currentTopic}`;
 
-  scoreBoardElem.appendChild(playerName);
-  scoreBoardElem.appendChild(correctAnswers);
-  scoreBoardElem.appendChild(topicPlayed);
+  scoreBoardElem.appendChild(scoreText);
   quizContainer.appendChild(scoreBoardElem);
 
   const exitButton = document.createElement('button');
   exitButton.textContent = 'Exit';
+  exitButton.className = 'exit-button';
   exitButton.onclick = function () {
     location.reload();
   };
-  exitButton.className = 'exit-button';
+
   quizContainer.appendChild(exitButton);
-  // FeedBack button
+
+  // Add "Leave Feedback" button
   const feedbackButton = document.createElement('button');
   feedbackButton.textContent = 'Leave Feedback';
-  feedbackButton.onclick = leaveFeedback;
   feedbackButton.className = 'feedback-button';
-
+  feedbackButton.onclick = leaveFeedback;
   quizContainer.appendChild(feedbackButton);
-
-  // Hide the title and topic selection menu
-  document.getElementById('quizTitle').style.display = 'none';
-  document.getElementById('topics').style.display = 'none';
 }
+
+// Feedback form
 function leaveFeedback() {
   const quizContainer = document.getElementById('quiz');
   quizContainer.innerHTML = '';
+
   const feedbackForm = document.createElement('form');
-  feedbackForm.id = 'feedbackForm';
   feedbackForm.classList.add('feedback-form');
+
   const feedbackLabel = document.createElement('label');
   feedbackLabel.textContent = 'Your Feedback:';
   feedbackLabel.classList.add('feedback-label');
+
   const feedbackInput = document.createElement('textarea');
-  feedbackInput.name = 'feedback';
-  feedbackInput.rows = '4';
-  feedbackInput.required = true;
   feedbackInput.classList.add('feedback-input');
+  feedbackInput.setAttribute('rows', '5');
+  feedbackInput.setAttribute('placeholder', 'Enter your feedback here...');
+
   const submitButton = document.createElement('button');
   submitButton.textContent = 'Submit Feedback';
   submitButton.classList.add('feedback-button');
+  submitButton.onclick = function (event) {
+    event.preventDefault();
+    // Handle feedback submission
+    thankYouFeedback();
+  };
+
   feedbackForm.appendChild(feedbackLabel);
   feedbackForm.appendChild(feedbackInput);
   feedbackForm.appendChild(submitButton);
+
   quizContainer.appendChild(feedbackForm);
-  feedbackForm.addEventListener('submit', submitFeedback);
 }
 
-function submitFeedback(event) {
-  event.preventDefault();
-  const feedbackForm = document.getElementById('feedbackForm');
-  const feedbackText = feedbackForm.elements.feedback.value;
+// Thank you message after feedback
+function thankYouFeedback() {
   const quizContainer = document.getElementById('quiz');
   quizContainer.innerHTML = '';
-  const feedbackThanks = document.createElement('p');
-  feedbackThanks.textContent = 'Thank you for your feedback!';
-  feedbackThanks.classList.add('feedback-thanks');
+
+  const thankYouMessage = document.createElement('p');
+  thankYouMessage.textContent = 'Thank you for your feedback!';
+  thankYouMessage.classList.add('thank-you-message');
+
   const exitButton = document.createElement('button');
   exitButton.textContent = 'Exit';
+  exitButton.className = 'exit-button';
   exitButton.onclick = function () {
     location.reload();
   };
-  exitButton.className = 'exit-button';
-  quizContainer.appendChild(feedbackThanks);
+
+  quizContainer.appendChild(thankYouMessage);
   quizContainer.appendChild(exitButton);
 }
+
+// Call the function to generate the buttons when the page loads
+window.onload = function () {
+  createTopicButtons();
+};
