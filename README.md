@@ -56,9 +56,19 @@ The live link can be found here - [BarsQuiz](https://barsllvl.github.io/barsquiz
 - When I wrote JavaScript code to check the answer in a question, and so that the “Next” button would work only after the answer, there was a bug that the “Next” button would not work at all. The code was completely changed to a different one, I consulted with a friend who is more versed in JavaScript coding, and helped me solve it.
 - Removing the starting/fixed the problem.
 - Bug with an unanswered question. In the last question, if the player did not answer, after 5 seconds when the player should have been transferred to the page with the scoreboard, there was simply a blank page.
+- `TypeError: Cannot read properties of null (reading 'style')`
+- **Description**: This error occurred when attempting to load a new question in the quiz functionality. The error was triggered because the JavaScript code attempted to access the `style` property of an HTML element that was `null` (i.e., not present on the page or not yet rendered).
+- **Cause**: The DOM element in question was not loaded or available at the time the `loadQuestions` function tried to access it. This resulted in the script trying to manipulate a non-existent element, which caused the error.
+- **Error Message**:
+  ```bash
+  Uncaught TypeError: Cannot read properties of null (reading 'style')
+  at loadQuestions (script.js:304:39)
+  at nextButton.onclick (script.js:262:5)
+1. **Before Fix**: ![error](docs/readme-photo/console-error1.png)
+2. **After Fix and update**: ![noerror](docs/readme-photo/console-noerror.png)
+
 ## Unfxied Bugs
 - Better customize the scoreboard, highlight the player’s results, topic, name in a separate color and font.
-- Customize FeedBack font.
 ## Validator Testing
 - HTML
     - No errors were returned when passing through the official [W3C validator](https://validator.w3.org/#validate_by_uri).
